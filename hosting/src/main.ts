@@ -1,24 +1,29 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+// Initialize Firebase
+import { app } from './config/firebase';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithRedirect,
+  GoogleAuthProvider,
+} from 'firebase/auth';
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+console.log(`Check firebase app : ${app.name}`);
+
+const auth = getAuth();
+const SignInWithGoogle = document.getElementById('SignInWithGoogle');
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) return;
+  // User is signed in, see docs for a list of available properties
+  // https://firebase.google.com/docs/reference/js/firebase.User
+  // ...
+  // const uid = user.uid;
+  // ...
+
+  console.log(user);
+});
+
+SignInWithGoogle?.addEventListener('click', () => {
+  signInWithRedirect(auth, new GoogleAuthProvider());
+});
