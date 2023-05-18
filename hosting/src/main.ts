@@ -7,6 +7,7 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithRedirect,
+  signOut,
   GoogleAuthProvider,
   Auth,
   User,
@@ -15,7 +16,9 @@ import {
 console.log(`Check firebase app : ${app.name}`);
 
 const auth: Auth = getAuth();
-const SignInWithGoogle = document.getElementById('SignInWithGoogle');
+const SignInWithGoogle = document.getElementById('signInWithGoogle');
+
+const SignOut = document.getElementById('signOut');
 
 onAuthStateChanged(auth, async (user: User | null) => {
   if (!user) return;
@@ -26,7 +29,7 @@ onAuthStateChanged(auth, async (user: User | null) => {
   // ...
   const { uid } = user;
   const userData = doc(users, uid);
-  await getDoc(userData).then((doc) => {
+  const expensesData = await getDoc(userData).then((doc) => {
     if (!doc.exists) {
       console.log('No such document!');
       return;
@@ -35,8 +38,33 @@ onAuthStateChanged(auth, async (user: User | null) => {
       return doc.data();
     }
   });
+
+  const userTable = document.getElementById('userTable');
+  userTable?.insertAdjacentHTML(
+    'beforeend',
+    `
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Photo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>${expensesData?.email}</td>
+        <td>${expensesData?.displayName}</td>
+        <td><img src="${expensesData?.photoURL}" alt=""></img></td>
+      </tr>
+    </tbody>
+  `,
+  );
 });
 
 SignInWithGoogle?.addEventListener('click', () => {
   signInWithRedirect(auth, new GoogleAuthProvider());
+});
+
+SignOut?.addEventListener('click', () => {
+  signOut(auth);
 });

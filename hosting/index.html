@@ -5,10 +5,28 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
+    <style>
+      .authContainer {
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+      }
+      .userTable {
+        margin: auto;
+        width: 50%;
+        text-align: center;
+        margin-top: 120px;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <button id="SignInWithGoogle">SignInWithGoogle</button>
+      <div id="authContainer">
+        <button id="signInWithGoogle">SignInWithGoogle</button>
+        <button id="signOut">SignOut</button>
+      </div>
+      <table border="1" id="userTable" class="userTable"></table>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
